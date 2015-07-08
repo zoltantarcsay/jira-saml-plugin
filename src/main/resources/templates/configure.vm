@@ -1,6 +1,8 @@
 <head>
     <meta name="decorator" content="atl.admin" />
     <title>$i18n.getText("saml2plugin.admin.title")</title>
+    <meta name="admin.active.section" content="admin_system_menu/top_system_section/mail_section">
+    <meta name="admin.active.tab" content="saml2plugin.config.link">
     $webResourceManager.requireResource("com.bitium.jira.SAML2PluginJira:admin-resources")
 </head>
 <body>
