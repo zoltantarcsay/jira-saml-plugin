@@ -18,7 +18,7 @@
             #end
         </div>
     #end
-    <form class="aui" name="saml2pluginjira-configure-form" method="POST" action="${req.contextPath}/secure/saml2pluginjira.configure.jspa">
+    <form class="aui" name="saml2pluginjira-configure-form" method="POST" action="${req.contextPath}/secure/admin/saml2pluginjira.configure.jspa">
 
         <input type="hidden" name="submitAction" value="submit"/>
 
