@@ -4,6 +4,8 @@ A plugin for Atlassian Jira to support connecting to a SAML 2.0 IdP.
 
 This library adheres to [SemVer](http://semver.org). Pre v1.0.0 is considered alpha level software.
 
+## Usage
+Please see the [wiki page](https://github.com/bitium/jira-saml-plugin/wiki/Installation-and-Usage-Instructions) for usage information
 
 ## Installation
 
