@@ -15,6 +15,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	private String logoutUrl;
 	private String entityId;
 	private String uidAttribute;
+	private String autoCreateUser;
 	private String x509Certificate;
 	private String idpRequired;
 	private String success = "";
@@ -60,6 +61,14 @@ public class ConfigureAction extends JiraWebActionSupport {
 
 	public void setUidAttribute(String uidAttribute) {
 		this.uidAttribute = uidAttribute;
+	}
+
+	public String getAutoCreateUser() {
+		return autoCreateUser;
+	}
+
+	public void setAutoCreateUser(String autoCreateUser) {
+		this.autoCreateUser = autoCreateUser;
 	}
 
 	public String getLogoutUrl() {
@@ -140,6 +149,11 @@ public class ConfigureAction extends JiraWebActionSupport {
 		} else {
 			setIdpRequired("true");
 		}
+		if (StringUtils.isBlank(getAutoCreateUser())) {
+			setAutoCreateUser("false");
+		} else {
+			setAutoCreateUser("true");
+		}
 
 	}
 
@@ -157,6 +171,12 @@ public class ConfigureAction extends JiraWebActionSupport {
 			} else {
 				setIdpRequired("false");
 			}
+			String autoCreateUser = saml2Config.getAutoCreateUser();
+			if (autoCreateUser != null) {
+				setAutoCreateUser(autoCreateUser);
+			} else {
+				setAutoCreateUser("false");
+			}
 			return "success";
 		}
 		saml2Config.setLoginUrl(getLoginUrl());
@@ -165,6 +185,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 		saml2Config.setUidAttribute(getUidAttribute());
 		saml2Config.setX509Certificate(getX509Certificate());
 		saml2Config.setIdpRequired(getIdpRequired());
+		saml2Config.setAutoCreateUser(getAutoCreateUser());
 
 		setSuccess("success");
 		return "success";

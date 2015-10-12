@@ -18,7 +18,8 @@ public class SAMLJiraConfig implements SAMLConfig {
 	public static final String UID_ATTRIBUTE_SETTING = "salm2.uidAttribute";
 	public static final String X509_CERTIFICATE_SETTING = "saml2.x509Certificate";
 	public static final String IDP_REQUIRED_SETTING = "saml2.idpRequired";
-	
+	public static final String AUTO_CREATE_USER_SETTING = "saml2.autoCreateUser";
+
 	public void setPluginSettingsFactory(PluginSettingsFactory pluginSettingsFactory) {
 		this.pluginSettings = pluginSettingsFactory.createGlobalSettings();
 	}
@@ -58,7 +59,23 @@ public class SAMLJiraConfig implements SAMLConfig {
 			return false;
 		}
 	}
-	
+
+	public void setAutoCreateUser(String autoCreateUser) {
+		pluginSettings.put(AUTO_CREATE_USER_SETTING, autoCreateUser);
+	}
+
+	public String getAutoCreateUser() {
+		return StringUtils.defaultString((String)pluginSettings.get(AUTO_CREATE_USER_SETTING));
+	}
+
+	public boolean getAutoCreateUserFlag() {
+		if (StringUtils.defaultString((String)pluginSettings.get(AUTO_CREATE_USER_SETTING)).equals("true")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public String getLoginUrl() {
 		return StringUtils.defaultString((String)pluginSettings.get(LOGIN_URL_SETTING));
 	}
