@@ -15,6 +15,7 @@ public class SAMLJiraConfig implements SAMLConfig {
 	public static final String ENTITY_ID_SETTING = "saml2.entityId";
 	public static final String LOGIN_URL_SETTING = "saml2.loginUrl";
 	public static final String LOGOUT_URL_SETTING = "saml2.logoutUrl";
+	public static final String UID_ATTRIBUTE_SETTING = "salm2.uidAttribute";
 	public static final String X509_CERTIFICATE_SETTING = "saml2.x509Certificate";
 	public static final String IDP_REQUIRED_SETTING = "saml2.idpRequired";
 	
@@ -31,7 +32,11 @@ public class SAMLJiraConfig implements SAMLConfig {
 	}
 
 	public void setEntityId(String entityId) {
-		pluginSettings.put(ENTITY_ID_SETTING, entityId);		
+		pluginSettings.put(ENTITY_ID_SETTING, entityId);
+	}
+
+	public void setUidAttribute(String uidAttribute) {
+		pluginSettings.put(UID_ATTRIBUTE_SETTING, uidAttribute);
 	}
 
 	public void setX509Certificate(String x509Certificate) {
@@ -64,6 +69,10 @@ public class SAMLJiraConfig implements SAMLConfig {
 
 	public String getIdpEntityId() {
 		return StringUtils.defaultString((String)pluginSettings.get(ENTITY_ID_SETTING));
+	}
+
+	public String getUidAttribute() {
+		return StringUtils.defaultString((String)pluginSettings.get(UID_ATTRIBUTE_SETTING), "NameID");
 	}
 
 	public String getX509Certificate() {

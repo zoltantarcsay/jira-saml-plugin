@@ -40,6 +40,9 @@
 ##        <div class="field-label">$i18n.getText("saml2plugin.admin.field.logoutUrl")</div>
 ##        <input class="field-input" type="text" name="logoutUrl" id="logoutUrl" value="$textutils.htmlEncode( $logoutUrl )"/>
 ##        <div class="field-desc">$i18n.getText("saml2plugin.admin.field.logoutUrl.desc")</div>
+        <div class="field-label">$i18n.getText("saml2plugin.admin.field.uidAttribute")</div>
+        <input class="field-input" type="text" name="uidAttribute" id="uidAttribute" value="$textutils.htmlEncode( $uidAttribute)"/>
+        <div class="field-desc">$i18n.getText("saml2plugin.admin.field.uidAttribute.desc")</div>
         <div class="field-label">$i18n.getText("saml2plugin.admin.field.x509Certificate")</div>
         <textarea class="field-input" name="x509Certificate" id="x509Certificate" rows="10">$textutils.htmlEncode( $x509Certificate )</textarea>
         <div class="field-desc">$i18n.getText("saml2plugin.admin.field.x509Certificate.desc")</div>
@@ -56,5 +59,4 @@
         <div style="margin-top:10px"><input class="aui-button aui-button-primary" type="submit" value="$i18n.getText('save.name')"></div>
         
     </form>
-</body>
-</html>
+</body></html>

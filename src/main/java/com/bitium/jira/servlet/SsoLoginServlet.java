@@ -80,10 +80,11 @@ public class SsoLoginServlet extends HttpServlet {
 
 	        request.getSession().setAttribute("SAMLCredential", credential);
 
-	        //String userName = ((XSAny)credential.getAttributes().get(0).getAttributeValues().get(0)).getTextContent();
-                String userName = credential.getNameID().getValue(); 
 
-	        authenticateUserAndLogin(request, response, userName);
+			String uidAttribute = saml2Config.getUidAttribute();
+			String userName = uidAttribute.equals("NameID") ? credential.getNameID().getValue() : credential.getAttributeAsString(uidAttribute);
+
+			authenticateUserAndLogin(request, response, userName);
 		} catch (AuthenticationException e) {
 			try {
 			    log.error("saml plugin error + " + e.getMessage());
