@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atlassian.jira.exception.CreateException;
+import com.atlassian.jira.exception.PermissionException;
+import com.atlassian.jira.user.ApplicationUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.opensaml.xml.schema.XSAny;
@@ -22,6 +25,8 @@ import org.springframework.security.saml.websso.WebSSOProfileConsumerImpl;
 import org.springframework.security.saml.websso.WebSSOProfileImpl;
 import org.springframework.security.saml.websso.WebSSOProfileOptions;
 
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.user.DelegatingApplicationUser;
 import com.atlassian.seraph.auth.Authenticator;
 import com.atlassian.seraph.auth.DefaultAuthenticator;
@@ -36,6 +41,8 @@ public class SsoLoginServlet extends HttpServlet {
 	private Log log = LogFactory.getLog(SsoLoginServlet.class);
 
 	private SAMLJiraConfig saml2Config;
+
+	private SAMLCredential credential;
 
 	@Override
 	public void init() throws ServletException {
@@ -76,14 +83,15 @@ public class SsoLoginServlet extends HttpServlet {
 	        messageContext.getPeerEntityMetadata().setEntityID(saml2Config.getIdpEntityId());
 
 	        WebSSOProfileConsumer consumer = new WebSSOProfileConsumerImpl(context.getSamlProcessor(), context.getMetadataManager());
-	        SAMLCredential credential = consumer.processAuthenticationResponse(messageContext);
+	        credential = consumer.processAuthenticationResponse(messageContext);
 
 	        request.getSession().setAttribute("SAMLCredential", credential);
 
-	        //String userName = ((XSAny)credential.getAttributes().get(0).getAttributeValues().get(0)).getTextContent();
-                String userName = credential.getNameID().getValue(); 
 
-	        authenticateUserAndLogin(request, response, userName);
+			String uidAttribute = saml2Config.getUidAttribute();
+			String userName = uidAttribute.equals("NameID") ? credential.getNameID().getValue() : credential.getAttributeAsString(uidAttribute);
+
+			authenticateUserAndLogin(request, response, userName);
 		} catch (AuthenticationException e) {
 			try {
 			    log.error("saml plugin error + " + e.getMessage());
@@ -104,7 +112,7 @@ public class SsoLoginServlet extends HttpServlet {
 	private void authenticateUserAndLogin(HttpServletRequest request,
 			HttpServletResponse response, String username)
 			throws NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException, IOException {
+			InvocationTargetException, IOException, PermissionException, CreateException {
 		Authenticator authenticator = SecurityConfigFactory.getInstance().getAuthenticator();
 
 		if (authenticator instanceof DefaultAuthenticator) {
@@ -113,6 +121,10 @@ public class SsoLoginServlet extends HttpServlet {
 		    Method getUserMethod = DefaultAuthenticator.class.getDeclaredMethod("getUser", new Class[]{String.class});
 		    getUserMethod.setAccessible(true);
 		    Object userObject = getUserMethod.invoke(authenticator, new Object[]{username});
+			// if not found, see if we're allowed to auto-create the user
+			if (userObject == null) {
+				userObject = tryCreateOrUpdateUser(username);
+			}
 		    if(userObject != null && userObject instanceof DelegatingApplicationUser) {
 		    	Principal principal = (Principal)userObject;
 
@@ -129,6 +141,22 @@ public class SsoLoginServlet extends HttpServlet {
 		}
 
 		response.sendRedirect("/jira/login.jsp?samlerror=user_not_found");
+	}
+
+	private Object tryCreateOrUpdateUser(String userName) throws PermissionException, CreateException{
+		if (saml2Config.getAutoCreateUserFlag()){
+			UserUtil uu = ComponentAccessor.getUserUtil();
+			String fullName = credential.getAttributeAsString("cn");
+			String email = credential.getAttributeAsString("mail");
+			log.warn("Creating user account for " + userName );
+			uu.createUserNoNotification(userName, null, email, fullName);
+			// above returns api.User but we need ApplicationUser so search for it
+			return uu.getUserByName(userName);
+		} else {
+			// not allowed to auto-create user
+			log.error("User not found and auto-create disabled: " + userName);
+		}
+		return null;
 	}
 
 	public void setSaml2Config(SAMLJiraConfig saml2Config) {
