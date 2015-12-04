@@ -21,7 +21,7 @@ AJS.$(function() {
 	if(loginFormId == "login-form") {
             AJS.$('<div class="field-group"><a class="aui-button aui-style aui-button-primary" href="plugins/servlet/saml/auth" style="align:center;">Use Corporate login</a></div><h2 style="margin-top:10px"></h2>').insertBefore(AJS.$("#" + loginFormId + " .form-body"));
         } else {
-            AJS.$('<div class="field-group"><a class="aui-button aui-style aui-button-primary" href="/jira/plugins/servlet/saml/auth" style="margin-left:100px;margin-top:5px;">Use Corporate login</a></div>').insertBefore(AJS.$("#gadget-0"));
+            AJS.$('<div class="field-group"><a class="aui-button aui-style aui-button-primary" href="/plugins/servlet/saml/auth" style="margin-left:100px;margin-top:5px;">Use Corporate login</a></div>').insertBefore(AJS.$("#gadget-0"));
         }
 
         var query = location.search.substr(1);
