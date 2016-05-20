@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bitium.jira</groupId>
     <artifactId>SAML2PluginJira</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3-JIRA7-compatible</version>
     <name>SAML 2.0 Single Sign-On for Jira</name>
     <description>Easily configure Jira to support SAML 2.0</description>
     <packaging>atlassian-plugin</packaging>
@@ -157,7 +157,7 @@
         </plugins>
     </build>
     <properties>
-        <jira.version>6.3.5</jira.version>
+        <jira.version>7.1.6</jira.version>
         <amps.version>5.1.6</amps.version>
         <plugin.testrunner.version>1.2.0</plugin.testrunner.version>
         <!-- TestKit version 5.x for JIRA 5.x, 6.x for JIRA 6.x -->

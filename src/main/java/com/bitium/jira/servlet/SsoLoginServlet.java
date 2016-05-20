@@ -28,7 +28,7 @@ import org.springframework.security.saml.websso.WebSSOProfileOptions;
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.user.DelegatingApplicationUser;
+import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.seraph.auth.Authenticator;
 import com.atlassian.seraph.auth.DefaultAuthenticator;
 import com.atlassian.seraph.config.SecurityConfigFactory;
@@ -158,7 +158,7 @@ public class SsoLoginServlet extends HttpServlet {
 			if (userObject == null) {
 				userObject = tryCreateOrUpdateUser(username);
 			}
-		    if(userObject != null && userObject instanceof DelegatingApplicationUser) {
+		    if(userObject != null && userObject instanceof ApplicationUser) {
 		    	Principal principal = (Principal)userObject;
 
 		    	Method authUserMethod = DefaultAuthenticator.class.getDeclaredMethod("authoriseUserAndEstablishSession",
