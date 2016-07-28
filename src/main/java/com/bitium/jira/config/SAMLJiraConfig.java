@@ -101,7 +101,7 @@ public class SAMLJiraConfig implements SAMLConfig {
 	}
 	
 	public String getAlias() {
-		return "confluenceSAML";
+		return "jiraSAML";
 	}
 
 	public String getBaseUrl() {

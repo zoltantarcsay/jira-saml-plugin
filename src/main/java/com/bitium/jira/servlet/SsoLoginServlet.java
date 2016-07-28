@@ -171,6 +171,9 @@ public class SsoLoginServlet extends HttpServlet {
 				if (result) {
 					if(request.getSession() != null && request.getSession().getAttribute("os_destination") != null) {
 						String os_destination = request.getSession().getAttribute("os_destination").toString();
+						if (!os_destination.startsWith("http")) {
+							os_destination = saml2Config.getBaseUrl() + os_destination;
+						}
 						response.sendRedirect(os_destination);
 					} else {
 						response.sendRedirect("/jira/secure/Dashboard.jspa");

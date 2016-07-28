@@ -62,11 +62,10 @@ AJS.$(function() {
                             },
                     success: function (response) {
                         if (response=="true") {
-                        	// AJS.$('<img src="download/resources/com.bitium.confluence.SAML2Plugin/images/progress.png"/>').insertBefore(AJS.$(".aui.login-form-container"));
+                        	// AJS.$('<img src="download/resources/com.bitium.jira.SAML2Plugin/images/progress.png"/>').insertBefore(AJS.$(".aui.login-form-container"));
             				AJS.$('<p>Please wait while we redirect you to your company log in page</p>').insertBefore(loginForm);
             				window.location.href = 'plugins/servlet/saml/auth';
-			        
-			} else {
+			        			} else {
 				loginForm.show();
 			}
                     }
