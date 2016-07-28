@@ -115,7 +115,8 @@ public class SsoLoginServlet extends HttpServlet {
 	        messageContext.setLocalEntityEndpoint(SAMLUtil.getEndpoint(messageContext.getLocalEntityRoleMetadata().getEndpoints(), messageContext.getInboundSAMLBinding(), request.getRequestURL().toString()));
 	        messageContext.getPeerEntityMetadata().setEntityID(saml2Config.getIdpEntityId());
 
-	        WebSSOProfileConsumer consumer = new WebSSOProfileConsumerImpl(context.getSamlProcessor(), context.getMetadataManager());
+	        WebSSOProfileConsumerImpl consumer = new WebSSOProfileConsumerImpl(context.getSamlProcessor(), context.getMetadataManager());
+			consumer.setMaxAuthenticationAge(72000);
 	        credential = consumer.processAuthenticationResponse(messageContext);
 
 	        request.getSession().setAttribute("SAMLCredential", credential);
@@ -127,14 +128,14 @@ public class SsoLoginServlet extends HttpServlet {
 			authenticateUserAndLogin(request, response, userName);
 		} catch (AuthenticationException e) {
 			try {
-			    log.error("saml plugin error + " + e.getMessage());
+			    log.error("saml plugin error + " + e.getMessage(), e);
 				response.sendRedirect("/jira/login.jsp?samlerror=plugin_exception");
 			} catch (IOException e1) {
 				throw new ServletException();
 			}
 		} catch (Exception e) {
 			try {
-			    log.error("saml plugin error + " + e.getMessage());
+			    log.error("saml plugin error + " + e.getMessage(), e);
 				response.sendRedirect("/jira/login.jsp?samlerror=plugin_exception");
 			} catch (IOException e1) {
 				throw new ServletException();
